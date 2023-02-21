@@ -44,18 +44,16 @@ pipeline {
         }  
       }
     }
-    stage ("If prod = validate the deployment removal") {
+    stage ("validate the deployment removal") {
       when {
         expression { branch != 'main' }
-      }
-      steps {
-        sh 'echo "Branch: $branch"'
       }
       input {
         message 'Remove?'
         ok 'ok'
       }
       steps {
+        sh 'echo "Branch: $branch"'
         dir('./k8s') {
         sh 'kubectl delete -f deployment.yaml --namespace=dev'
         }
