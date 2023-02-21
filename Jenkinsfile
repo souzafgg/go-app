@@ -48,12 +48,17 @@ pipeline {
       when {
         expression { branch != 'main' }
       }
+      steps {
+        sh 'echo "Branch: $branch"'
+      }
       input {
         message 'Remove?'
         ok 'ok'
       }
       steps {
-        sh 'kubectl delete -f ./k8s/deployment.yaml --namespace=dev'
+        dir('./k8s') {
+        sh 'kubectl delete -f deployment.yaml --namespace=dev'
+        }
       }
     }
   }
