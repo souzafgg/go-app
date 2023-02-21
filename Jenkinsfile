@@ -46,9 +46,8 @@ pipeline {
     }
     stage ("validate the deployment rm") {
       when {
-        not {
-          expression { env.BRANCH_NAME != 'main'}
-        }
+        beforeInput true
+        expression { env.BRANCH_NAME == 'main' }
       }
       input {
         message 'Do you want to remove your last k apply in dev namespace?'
