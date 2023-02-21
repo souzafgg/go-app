@@ -6,5 +6,9 @@
   tasks:
     - name: Check if the page is ok
       uri:
-        url: http://139.144.255.185
+        url: 
         status_code: 200
+      loop:
+        - http://139.144.255.185
+        - http://45.79.244.192
+

@@ -1,15 +1,15 @@
 pipeline {
   agent any
   environment {
-    branch = "${env.BRANCH_NAME}"
+    brc = "${env.BRANCH_NAME}"
     tag = "${env.BUILD_ID}"
   }
   stages {
     stage ("Building image") {
       steps {
           script {
-            sh 'echo "Building image with $branch"'
-            sh 'sed -i "s/x/$branch/g" ./main.go'
+            sh 'echo "Building image with $brc"'
+            sh 'sed -i "s/x/$brc/g" ./main.go'
             dockerapp = docker.build("szadhub/go-app:$tag", "-f Dockerfile ./")
           }
       }
@@ -44,12 +44,12 @@ pipeline {
         }  
       }
     }
-    stage ("validate the deployment removal") {
+    stage ("validate the deployment rm") {
       when {
-        not { branch 'main' }
+        expression { branch != 'main' }
       }
       input {
-        message 'Remove?'
+        message 'Do you want to remove your last k apply in dev namespace?'
         ok 'ok'
       }
       steps {
@@ -62,10 +62,8 @@ pipeline {
   }
   post {
     always {
-      steps {
           sh 'echo "Testing if the hosts are ok"'
-          ansiblePlaybook credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml'
-        }
+          ansiblePlaybook(credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml')
       }
     }
   }
