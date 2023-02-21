@@ -29,14 +29,16 @@ pipeline {
           if (env.BRANCH_NAME != 'main') {
             withKubeConfig([credentialsId: 'kube-creds']) {
               sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
-              dir('./k8s')
+              dir('./k8s') {
               sh 'kubectl apply -f deployment.yaml --namespace=dev'
+              }
             }
           } else {
             withKubeConfig([credentialsId: 'kube-creds']) {
               sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
-              dir('./k8s')
+              dir('./k8s') {
               sh 'kubectl apply -f deployment.yaml --namespace=prod'
+              }
             }
           }
         }  
