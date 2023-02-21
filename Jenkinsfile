@@ -46,14 +46,13 @@ pipeline {
     }
     stage ("validate the deployment rm") {
       when {
-        expression { branch != 'main' }
+        not { branch 'main' }
       }
       input {
         message 'Do you want to remove your last k apply in dev namespace?'
         ok 'ok'
       }
       steps {
-        sh 'echo "Branch: $branch"'
         dir('./k8s') {
         sh 'kubectl delete -f deployment.yaml --namespace=dev'
         }
@@ -62,8 +61,8 @@ pipeline {
   }
   post {
     always {
-          sh 'echo "Testing if the hosts are ok"'
-          ansiblePlaybook(credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml')
+        sh 'echo "Testing if the hosts are ok"'
+        ansiblePlaybook(credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml')
       }
     }
   }
