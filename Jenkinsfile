@@ -26,7 +26,7 @@ pipeline {
     stage ("Updating Kubernetes deployment with the new image") {
       steps {
         script {
-          if ($branch != 'main') {
+          if (branch != 'main') {
             withKubeConfig([credentialsId: 'kube-creds']) {
               sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
               sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=dev'
