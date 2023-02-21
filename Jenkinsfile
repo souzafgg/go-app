@@ -54,9 +54,12 @@ pipeline {
         ok 'ok'
       }
       steps {
-        dir('./k8s') {
-        sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'
-        sh 'kubectl delete -f deployment.yaml --namespace=dev'
+        script {
+          withKubeConfig([credentialsId: 'kube-creds']) {
+            dir('./k8s') {
+            sh 'kubectl delete -f deployment.yaml --namespace=dev'
+            }
+          }
         }
       }
     }
