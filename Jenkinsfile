@@ -7,8 +7,9 @@ pipeline {
   stages {
     stage ("Building image") {
       steps {
-          sh 'Building image with $branch'
           script {
+            sh 'Building image with $branch'
+            sh 'sed -i "s/x/$branch/g" ./main.go'
             dockerapp = docker.build("szadhub/go-app:$tag", "-f Dockerfile ./")
           }
       }
