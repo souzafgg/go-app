@@ -1,0 +1,10 @@
+---
+- name: Testing hosts
+  hosts: main
+  gather_facts: false
+
+  tasks:
+    - name: Check if the page is ok
+      uri:
+        url: http://139.144.255.185
+        status_code: 200
