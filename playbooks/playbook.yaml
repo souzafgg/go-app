@@ -5,9 +5,8 @@
 
   tasks:
     - name: Check if the page is ok
-      uri:
-        url: 
-        status_code: 200
+      community.general.oneandone_load_balancer:
+        health_check_path: "{{ item }}" 
       loop:
         - http://139.144.255.185
         - http://45.79.244.192
