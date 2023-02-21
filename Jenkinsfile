@@ -25,15 +25,17 @@ pipeline {
     }
     stage ("Updating Kubernetes deployment with the new image") {
       steps {
-        if ($branch != 'main') {
-          withKubeConfig([credentialsId: 'kube-creds']) {
-            sh 'sed -i "s/{{tag}}/$tag/g" ./k8s/deployment.yaml'
-            sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=dev'
+        script {
+          if ($branch != 'main') {
+            withKubeConfig([credentialsId: 'kube-creds']) {
+              sh 'sed -i "s/{{tag}}/$tag/g" ./k8s/deployment.yaml'
+              sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=dev'
           }
         } else {
-          withKubeConfig([credentialsId: 'kube-creds']) {
-            sh 'sed -i "s/{{tag}}/$tag/g" ./k8s/deployment.yaml'
-            sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=prod'
+            withKubeConfig([credentialsId: 'kube-creds']) {
+              sh 'sed -i "s/{{tag}}/$tag/g" ./k8s/deployment.yaml'
+              sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=prod'
+            }
           }
         } 
       }
