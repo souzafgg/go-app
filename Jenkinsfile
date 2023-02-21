@@ -8,7 +8,7 @@ pipeline {
     stage ("Building image") {
       steps {
           script {
-            sh 'Building image with $branch'
+            sh 'echo "Building image with $branch"'
             sh 'sed -i "s/x/$branch/g" ./main.go'
             dockerapp = docker.build("szadhub/go-app:$tag", "-f Dockerfile ./")
           }
@@ -56,7 +56,7 @@ pipeline {
   post {
     always {
       steps {
-          sh 'Testing if the hosts are ok'
+          sh 'echo "Testing if the hosts are ok"'
           ansiblePlaybook credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml'
         }
       }
