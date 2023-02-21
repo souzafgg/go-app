@@ -45,16 +45,18 @@ pipeline {
       }
     }
     stage ("validate the deployment rm") {
-      if (env.BRANCH_NAME != 'main')
-        input {
-          message 'Do you want to remove your last k apply in dev namespace?'
-          ok 'ok'
+      when {
+        expression { ${BRANCH_NAME} != 'main'}
+      }
+      input {
+        message 'Do you want to remove your last k apply in dev namespace?'
+        ok 'ok'
       }
       steps {
         dir('./k8s') {
         sh 'kubectl delete -f deployment.yaml --namespace=dev'
         }
-      }      
+      }
     }
   }
   post {
