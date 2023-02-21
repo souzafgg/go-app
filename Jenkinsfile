@@ -25,19 +25,19 @@ pipeline {
     }
     stage ("Updating Kubernetes deployment with the new image") {
       steps {
-        script {
           if (branch != 'main') {
             withKubeConfig([credentialsId: 'kube-creds']) {
               sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
-              sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=dev'
+              dir('./k8s')
+              sh 'kubectl apply -f deployment.yaml --namespace=dev'
           }
         } else {
             withKubeConfig([credentialsId: 'kube-creds']) {
               sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
-              sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=prod'
+              dir('./k8s')
+              sh 'kubectl apply -f deployment.yaml --namespace=prod'
             }
           }
-        } 
       }
     }
     stage ("If prod = validate the deployment removal") {
