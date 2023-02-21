@@ -46,7 +46,7 @@ pipeline {
     }
     stage ("validate the deployment removal") {
       when {
-        expression { branch != 'main' }
+        not { branch 'main' }
       }
       input {
         message 'Remove?'
