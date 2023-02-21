@@ -54,6 +54,7 @@ pipeline {
         ok 'ok'
       }
       steps {
+        sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
         dir('./k8s') {
         sh 'kubectl delete -f deployment.yaml --namespace=dev'
         }
