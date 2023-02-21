@@ -27,16 +27,16 @@ pipeline {
       steps {
         script {
           if (env.BRANCH_NAME != 'main') {
-            withKubeConfig([credentialsId: 'kube-creds']) {
-              sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
+            withKubeConfig([credentialsId: 'kube-creds']) { 
               dir('./k8s') {
+              sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'  
               sh 'kubectl apply -f deployment.yaml --namespace=dev'
               }
             }
           } else {
             withKubeConfig([credentialsId: 'kube-creds']) {
-              sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
               dir('./k8s') {
+              sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'
               sh 'kubectl apply -f deployment.yaml --namespace=prod'
               }
             }
@@ -54,8 +54,8 @@ pipeline {
         ok 'ok'
       }
       steps {
-        sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
         dir('./k8s') {
+        sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'
         sh 'kubectl delete -f deployment.yaml --namespace=dev'
         }
       }
