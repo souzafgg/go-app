@@ -49,7 +49,7 @@ pipeline {
         ok 'ok'
       }
       steps {
-        sh 'kubectl delete -f ./k8s/deployment.yaml --namespace=prod'
+        sh 'kubectl delete -f ./k8s/deployment.yaml --namespace=dev'
       }
     }
   }
