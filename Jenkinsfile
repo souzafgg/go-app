@@ -47,7 +47,7 @@ pipeline {
     stage ("validate the deployment rm") {
       when {
         not {
-          expression { env.BRANCH_NAME == 'main'}
+          expression { env.BRANCH_NAME != 'main'}
         }
       }
       input {
