@@ -31,6 +31,9 @@ pipeline {
               dir('./k8s') {
               sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'  
               sh 'kubectl apply -f deployment.yaml --namespace=dev'
+              sh 'chmod +x get-ip.sh'
+              sh 'sed -i "s/{{SW}}/dev/g" get-ip.sh'
+              sh './get-ip.sh'
               }
             }
           } else {
@@ -38,6 +41,9 @@ pipeline {
               dir('./k8s') {
               sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'
               sh 'kubectl apply -f deployment.yaml --namespace=prod'
+              sh 'chmod +x get-ip.sh'
+              sh 'sed -i "s/{{SW}}/prod/g" get-ip.sh'
+              sh './get-ip.sh'
               }
             }
           }
