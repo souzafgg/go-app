@@ -28,12 +28,12 @@ pipeline {
         script {
           if ($branch != 'main') {
             withKubeConfig([credentialsId: 'kube-creds']) {
-              sh 'sed -i "s/{{tag}}/$tag/g" ./k8s/deployment.yaml'
+              sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
               sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=dev'
           }
         } else {
             withKubeConfig([credentialsId: 'kube-creds']) {
-              sh 'sed -i "s/{{tag}}/$tag/g" ./k8s/deployment.yaml'
+              sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
               sh 'kubectl apply -f ./k8s/deployment.yaml --namespace=prod'
             }
           }
