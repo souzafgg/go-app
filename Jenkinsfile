@@ -52,13 +52,13 @@ pipeline {
         sh 'kubectl delete -f ./k8s/deployment.yaml --namespace=prod'
       }
     }
-  }
   post {
     always {
       steps {
           sh 'Testing if the hosts are ok'
           ansiblePlaybook credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml'
+        }
       }
     }
   }
-}
+}  
