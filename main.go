@@ -8,7 +8,7 @@ import (
 
 func srv(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK!"))
-	w.Write([]byte("\nUpload feito pela branch tag"))
+	w.Write([]byte("\nUpload feito pela branch x "))
 }
 
 func main() {
