@@ -9,7 +9,6 @@ pipeline {
       steps {
           sh 'Building image with $branch'
           script {
-            sh 'sed -i "s/x/$branch/g" ./main.go'
             dockerapp = docker.build("szadhub/go-app:$tag", "-f Dockerfile ./")
           }
       }
