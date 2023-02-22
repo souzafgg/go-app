@@ -4,8 +4,13 @@
   gather_facts: false
 
   tasks:
-    - name: Check if the page is ok
-      uri:
-        url: http://{{ inventory_hostname }}
-        method: GET
-        status_code: 200
+    - name: Check if lb service is ok
+      k8s_info:
+        kind: Service
+        apiVersion: v1
+        name: go-app           
+        namespace: "{{ item }}"  
+      loop:
+        - dev
+        - prod
+      register: service_info
