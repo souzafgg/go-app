@@ -7,7 +7,7 @@
     - name: Check if lb service is ok
       k8s_info:
         kind: Service
-        apiVersion: v1
+        api_version: v1
         name: go-app           
         namespace: "{{ item }}"  
       loop:
