@@ -73,7 +73,9 @@ pipeline {
   post {
     always {
         sh 'echo "Testing if the hosts are ok"'
+        withKubeConfig([credentialsId: 'kube-creds']) {
         ansiblePlaybook(credentialsId: 'jenkins', inventory: 'hosts', playbook: 'playbooks/playbook.yaml')
+        }
       }
     }
   }

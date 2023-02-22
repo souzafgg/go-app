@@ -13,4 +13,4 @@
       loop:
         - dev
         - prod
-      register: service_info
+      register: service_list
