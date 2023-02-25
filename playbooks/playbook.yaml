@@ -4,10 +4,13 @@
   gather_facts: false
 
   tasks:
-    - name: Check if the page is ok
-      community.general.oneandone_load_balancer:
-        health_check_path: "{{ item }}" 
+    - name: Check if lb service is ok
+      k8s_info:
+        kind: Service
+        api_version: v1
+        name: go-app           
+        namespace: "{{ item }}"  
       loop:
-        - http://139.144.255.185
-        - http://45.79.244.192
-
+        - dev
+        - prod
+      register: service_list
