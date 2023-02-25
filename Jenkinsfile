@@ -50,6 +50,20 @@ pipeline {
         }  
       }
     }
+    stage ('Sonarqube ') {
+      steps {
+        script {
+          scannerHome = tool 'qube';
+          withSonarQubeEnv('sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=fpgo-app \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=${env.SONAR_HOST_URL} \
+            -Dsonar.login=${env.SONAR_AUTH_TOKEN}"  
+          }
+          slackSend (color: 'good', message: '[Teste relizado pelo sonarqube no build ${BUILD_URL}]', tokenCredentialId: 'slack-creds').addReaction('thumbsup')
+        }
+      }
+    }    
     stage ("validate the deployment rm") {
       when {
         beforeInput true
@@ -66,20 +80,6 @@ pipeline {
             sh 'kubectl delete -f deployment.yaml --namespace=dev'
             }
           }
-        }
-      }
-    }
-    stage ('Sonarqube ') {
-      steps {
-        script {
-          scannerHome = tool 'qube';
-          withSonarQubeEnv('sonarqube') {
-            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=fpgo-app \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=${env.SONAR_HOST_URL} \
-            -Dsonar.login=${env.SONAR_AUTH_TOKEN}"  
-          }
-          slackSend (color: 'good', message: '[Teste relizado pelo sonarqube no build ${BUILD_URL}]', tokenCredentialId: 'slack-creds').addReaction('thumbsup')
         }
       }
     }
