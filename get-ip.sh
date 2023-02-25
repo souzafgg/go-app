@@ -3,7 +3,7 @@ c=$(cat hosts | wc -l)
 k=$(kubectl get svc -n {{SW}} | awk 'NR==2{print $4}')
 gf=$(cat hosts | grep -v 'main')
 
-if [ $c != 3 ] && [ $k != $gf ]; then
+if [[ $c != 3 ]] && [[ $k != $gf ]]; then
     kubectl get svc -n {{SW}} | awk 'NR==2{print $4}' >> hosts
 else
     echo "Nada a preencher"
