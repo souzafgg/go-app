@@ -27,18 +27,24 @@ pipeline {
       steps {
         script {
           if (env.BRANCH_NAME != 'main') {
-            withKubeConfig([credentialsId: 'kube-creds']) {
-              sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
+            withKubeConfig([credentialsId: 'kube-creds']) { 
               dir('./k8s') {
+              sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'  
               sh 'kubectl apply -f deployment.yaml --namespace=dev'
               }
+              sh 'chmod +x get-ip.sh'
+              sh 'sed -i "s/{{SW}}/dev/g" get-ip.sh'
+              sh './get-ip.sh'
             }
           } else {
             withKubeConfig([credentialsId: 'kube-creds']) {
-              sh 'sed -i "s/{{TAG}}/$tag/g" ./k8s/deployment.yaml'
               dir('./k8s') {
+              sh 'sed -i "s/{{TAG}}/$tag/g" deployment.yaml'
               sh 'kubectl apply -f deployment.yaml --namespace=prod'
               }
+              sh 'chmod +x get-ip.sh'
+              sh 'sed -i "s/{{SW}}/prod/g" get-ip.sh'
+              sh './get-ip.sh'
             }
           }
         }  
@@ -54,8 +60,22 @@ pipeline {
         ok 'ok'
       }
       steps {
-        dir('./k8s') {
-        sh 'kubectl delete -f deployment.yaml --namespace=dev'
+        script {
+          withKubeConfig([credentialsId: 'kube-creds']) {
+            dir('./k8s') {
+            sh 'kubectl delete -f deployment.yaml --namespace=dev'
+            }
+          }
+        }
+      }
+    }
+    stage ('Sonarqube ') {
+      steps {
+        script {
+          scannerHome = tool 'qube';
+          withSonarQubeEnv('sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner"   
+          }
         }
       }
     }
