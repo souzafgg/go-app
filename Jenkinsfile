@@ -74,7 +74,10 @@ pipeline {
         script {
           scannerHome = tool 'qube';
           withSonarQubeEnv('sonarqube') {
-            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=fpgo-app -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"  
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=fpgo-app \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=${env.SONAR_HOST_URL} \
+            -Dsonar.login=${env.SONAR_AUTH_TOKEN}"  
           }
         }
       }
