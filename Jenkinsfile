@@ -60,7 +60,7 @@ pipeline {
             -Dsonar.host.url=${env.SONAR_HOST_URL} \
             -Dsonar.login=${env.SONAR_AUTH_TOKEN}"  
           }
-          slackSend (color: 'good', message: '[Teste relizado pelo sonarqube]', tokenCredentialId: 'slack-creds')
+          slackSend (color: 'good', message: '[Teste relizado pelo sonarqube utilizando a imagem szadhub/go-app:$tag]', tokenCredentialId: 'slack-creds')
         }
       }
     }    
